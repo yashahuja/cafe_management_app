@@ -5,8 +5,8 @@ const jwt = require('jsonwebtoken');
 const nodemailer = require('nodemailer');
 require('dotenv').config();
 
-var auth = require('./services/authentication')
-var checkRole = require('./services/checkRole')
+var auth = require('../services/authentication')
+var checkRole = require('../services/checkRole')
 
 router.post('/signup', (req, res) => {
     let user = req.body;
