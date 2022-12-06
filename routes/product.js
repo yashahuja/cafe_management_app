@@ -26,6 +26,75 @@ router.get('/get', auth.authenticateToken, (req,res)=>{
             return res.status(500).json(err);
         }
     })
-})
+});
+
+router.get('getByCategory/:id',auth.authenticateToken, (req,res)=>{
+    const id = req.params.id;
+    var query = 'select id, name from product where categoryId=? and status = "true"';
+    connection.query(query, [id], (err,result)=>{
+        if(!err){
+            return res.status(200).json(result);
+        }else{
+            return res.status(500).json(err);
+        }
+    });
+});
+
+router.get('/getById/:id',auth.authenticateToken, (req,res)=>{
+    const id = req.params.id;
+    var query = 'select id, name, description from product where id=?';
+    connection.query(query, [id], (err,result)=>{
+        if(!err){
+            return res.status(200).json(result);
+        }else{
+            return res.status(500).json(err);
+        }
+    });
+});
+
+router.patch('/update',auth.authenticateToken,checkRole.checkRole, (req,res)=>{
+    let product = req.body;
+    var query = 'update product set name =?, categoryId=?, description=?, price=? where id=?';
+    connection.query(query, [product.name, product.categoryId,product.description, product.price, product.id], (err,result)=>{
+        if(!err){
+            if(result.affectedRows == 0){
+                return res.status(404).json({message: 'Product id does not foun'})
+            }
+            return res.status(200).json({message: 'product updated successfully'});
+        }else{
+            return res.status(500).json(err);
+        }
+    });
+});
+
+router.delete('/delete/:id', auth.authenticateToken, checkRole.checkRole, (req, res)=>{
+    const id = req.params.id;
+    var query = 'delete from product where id = ?';
+    connection.query(query, [id], (err, result)=>{
+        if(!err){
+            if(result.affectedRows == 0){
+                return res.status(404).json({message: 'Product id does not foun'})
+            }
+            return res.status(200).json({message: 'product deleted successfully'});
+        }else{
+            return res.status(500).json(err);
+        }
+    })
+});
+
+router.patch('/updateStatus',auth.authenticateToken,checkRole.checkRole, (req,res)=>{
+    let product = req.body;
+    var query = 'update product set status =? where id=?';
+    connection.query(query, [product.status, product.id], (err,result)=>{
+        if(!err){
+            if(result.affectedRows == 0){
+                return res.status(404).json({message: 'Product id does not foun'})
+            }
+            return res.status(200).json({message: 'product status updated successfully'});
+        }else{
+            return res.status(500).json(err);
+        }
+    });
+});
 
 module.exports = router;
