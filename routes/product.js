@@ -3,7 +3,7 @@ const connection = require('../connection');
 const router = express.Router();
 
 var auth = require('../services/authentication');
-var checkRole = require('../services/checkRole');
+var checkRole = require('../services/checkRole');``
 
 router.post('/add', auth.authenticateToken, checkRole.checkRole, (req, res)=>{
     let product = req.body;
@@ -28,7 +28,7 @@ router.get('/get', auth.authenticateToken, (req,res)=>{
     })
 });
 
-router.get('getByCategory/:id',auth.authenticateToken, (req,res)=>{
+router.get('/getByCategory/:id',auth.authenticateToken, (req,res)=>{
     const id = req.params.id;
     var query = 'select id, name from product where categoryId=? and status = "true"';
     connection.query(query, [id], (err,result)=>{
@@ -42,10 +42,10 @@ router.get('getByCategory/:id',auth.authenticateToken, (req,res)=>{
 
 router.get('/getById/:id',auth.authenticateToken, (req,res)=>{
     const id = req.params.id;
-    var query = 'select id, name, description from product where id=?';
+    var query = 'select id, name, price, description from product where id=?';
     connection.query(query, [id], (err,result)=>{
         if(!err){
-            return res.status(200).json(result);
+            return res.status(200).json(result[0]);
         }else{
             return res.status(500).json(err);
         }

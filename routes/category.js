@@ -10,7 +10,7 @@ router.post('/add', auth.authenticateToken, checkRole.checkRole, (req,res)=>{
     query = 'insert into category (name) values(?)';
     connection.query(query, [category.name], (err,result)=>{
         if(!err){
-            return res.status(200).json({mwssage: 'category added successfully'});
+            return res.status(200).json({message: 'category added successfully'});
         }else{
             returnres.status(500).json(err);
         }

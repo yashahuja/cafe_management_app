@@ -72,13 +72,13 @@ router.post('/forgotpassword', (req, res) => {
     connection.query(query, [user.email], (err, result) => {
         if (!err) {
             if (result.length <= 0) {
-                return res.status(200).json({ message: 'Password not sent successfully to your email.' });
+                return res.status(200).json({ message: 'email id not registered. try signup.' });
             } else {
                 var mailOptions = {
                     from: process.env.EMAIL,
-                    to: 'yashahuja267@gmail.com',
+                    to: user.email,
                     subject: 'Password by cafe management system',
-                    html: '<p>your login details for cafe management system</p><br><p>Email:' + result[0].email + '</p><br><p>Password: ' + 'user.password' + '</p>'
+                    html: '<p>your login details for cafe management system</p><br><p>Email:' + result[0].email + '</p><br><p>Password: ' + result[0].password + '</p>'
                 }
                 transport.sendMail(mailOptions, function (error, info) {
                     if (error) {
